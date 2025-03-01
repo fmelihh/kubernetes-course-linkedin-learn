@@ -1,0 +1,55 @@
+# kubectl apply -f deployment.yaml
+# kubectl get deployments -n development
+# kubectl get pods -n development
+
+# kubectl delete pod pod-info-deployment-68c8476764-cjbt2 -n development
+# kubectl get pods -n development
+# NAME                                   READY   STATUS    RESTARTS   AGE
+# pod-info-deployment-68c8476764-5d8qw   1/1     Running   0          44s
+# pod-info-deployment-68c8476764-bq4g9   1/1     Running   0          3m7s
+# pod-info-deployment-68c8476764-xpm5j   1/1     Running   0          3m7s
+
+# kubectl describe pod pod-info-deployment-68c8476764-5d8qw -n development
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-info-deployment
+  namespace: development
+  labels:
+    app: pod-info
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pod-info
+  template:
+    metadata:
+      labels:
+        app: pod-info
+    spec:
+      containers:
+      - name: pod-info-container
+        image: kimschles/pod-info-app:latest
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+        env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP

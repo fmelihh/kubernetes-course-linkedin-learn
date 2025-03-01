@@ -1,0 +1,15 @@
+# kubectl apply -f namespace.yaml
+# kubectl get namespaces
+# kubectl delete -f namespace.yaml
+---
+# Namespace development
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: development
+---
+# Namespace production
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
